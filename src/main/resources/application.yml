@@ -1,0 +1,126 @@
+app:
+  eureka-hostname: localhost
+  eureka-port: 8761
+  database-hostname: localhost
+  database-port: 5436
+  database-name: user_service
+  server-port: 8086
+  application-name: user-service
+  kafka-hostname: localhost
+  kafka-port: 9092
+  kafka-default-topic: notificationTopic
+  kafka-concurrency: 3
+  kafka-group-id: notificationId
+  inventory-service-context-path: api/inventory
+  context-path: api/user
+  api-gateway-hostname: localhost
+  swagger-api-gateway-hostname: localhost
+  api-gateway-server-port: 8181
+  zipkin-hostname: localhost
+  zipkin-server-port: 9411
+  zipkin-context-path: api/v2/spans
+  mqtt-hostname: localhost
+  mqtt-port: 1883
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${app.eureka-hostname}:${app.eureka-port}/eureka
+    registry-fetch-interval-seconds: 5
+  instance:
+    lease-renewal-interval-in-seconds: 5
+
+spring:
+  application:
+    name: ${app.application-name}
+  flyway:
+    baseline-on-migrate: true
+    baseline-version: 0.0
+    locations: classpath:db/migration/
+    validate-on-migrate: true
+    enabled: true
+    table: schema_history
+#  kafka:
+#    enabled: true
+#    bootstrap-servers: ${app.kafka-hostname}:${app.kafka-port}
+#    template:
+#      default-topic: ${app.kafka-default-topic}
+#    producers:
+#      order-payment-processing:
+#        topic-name: order-payment-processing
+#    consumers:
+#      order-processing:
+#        topic-name: order-processing
+#        group-id: order-processing-${app.application-name}
+#        properties:
+#          concurrency: ${app.kafka-concurrency}
+#  mqtt:
+#    inbound:
+#      enabled: true
+#      url: tcp://${app.mqtt-hostname}:${app.mqtt-port}
+#      topics:
+#        - topic1
+#        - topic2
+#      completion-timeout: 50000 #ms
+#      qos: 1 #Quality of Service (QoS) level
+
+  datasource:
+    url: jdbc:postgresql://${app.database-hostname}:${app.database-port}/${app.database-name}
+    username: postgres
+    password: secret
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+management:
+  tracing:
+    enabled: true
+    propagation:
+      type: b3
+    sampling:
+      probability: 1.0
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  zipkin:
+    tracing:
+      endpoint: http://${app.zipkin-hostname}:${app.zipkin-server-port}/${app.zipkin-context-path}
+
+server:
+  port: ${app.server-port}
+  servlet:
+    context-path: /${app.context-path}
+
+logging:
+  level:
+    root: INFO
+  pattern:
+    level: "%5p[${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+#feign:
+#  client:
+#    enabled: true
+#    config:
+#      inventory-client:
+#        name: inventory-client
+#        url: http://${app.api-gateway-hostname}:${app.api-gateway-server-port}/${app.inventory-service-context-path}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+
+swagger:
+  server:
+    url: http://${app.swagger-api-gateway-hostname}:${app.api-gateway-server-port}/${app.context-path}
