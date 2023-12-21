@@ -1,0 +1,10 @@
+app:
+  eureka-hostname: discovery-server
+  database-hostname: postgres-user
+  database-port: 5432
+  kafka-hostname: kafka
+  kafka-port: 29092
+  inventory-service-hostname: inventory-service
+  api-gateway-hostname: api-gateway
+  zipkin-hostname: zipkin
+  mqtt-hostname: activemq
