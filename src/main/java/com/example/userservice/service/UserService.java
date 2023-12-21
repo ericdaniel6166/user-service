@@ -1,8 +1,16 @@
 package com.example.userservice.service;
 
-import com.example.userservice.dto.CreateUserRequest;
+import com.example.springbootmicroservicesframework.dto.MessageResponse;
+import com.example.springbootmicroservicesframework.exception.ValidationException;
+import com.example.userservice.dto.AuthenticationResponse;
+import com.example.userservice.dto.LoginRequest;
+import com.example.userservice.dto.RegisterAccountRequest;
 
 public interface UserService {
 
-    String register(CreateUserRequest request);
+    MessageResponse register(RegisterAccountRequest request) throws ValidationException;
+
+    AuthenticationResponse login(LoginRequest request);
+
+    MessageResponse verifyToken(String authorization);
 }
