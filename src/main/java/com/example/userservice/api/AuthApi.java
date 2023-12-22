@@ -2,6 +2,7 @@ package com.example.userservice.api;
 
 import com.example.springbootmicroservicesframework.dto.MessageResponse;
 import com.example.springbootmicroservicesframework.exception.ValidationException;
+import com.example.springbootmicroservicesframework.utils.UriConst;
 import com.example.userservice.dto.AuthenticationResponse;
 import com.example.userservice.dto.LoginRequest;
 import com.example.userservice.dto.RegisterAccountRequest;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Slf4j
 @Validated
-@RequestMapping("/auth")
+@RequestMapping(UriConst.AUTH)
 public class AuthApi {
     final UserService userService;
 
@@ -41,7 +42,7 @@ public class AuthApi {
         return ResponseEntity.ok(userService.login(request));
     }
 
-    @GetMapping("/verify-token")
+    @GetMapping(UriConst.VERIFY_TOKEN)
     public ResponseEntity<MessageResponse> verifyToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
             return ResponseEntity.ok(userService.verifyToken(authorization));
     }
