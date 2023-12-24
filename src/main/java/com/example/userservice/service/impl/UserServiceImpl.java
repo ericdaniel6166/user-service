@@ -5,12 +5,12 @@ import com.example.springbootmicroservicesframework.exception.ValidationExceptio
 import com.example.springbootmicroservicesframework.utils.Const;
 import com.example.springbootmicroservicesframework.utils.MessageConstant;
 import com.example.springbootmicroservicesframework.utils.AppSecurityUtils;
-import com.example.userservice.dto.AuthenticationResponse;
+import com.example.userservice.dto.AuthResponse;
 import com.example.userservice.dto.LoginRequest;
 import com.example.userservice.dto.RegisterAccountRequest;
 import com.example.userservice.dto.TokenDto;
-import com.example.userservice.model.UserInfo;
-import com.example.userservice.repository.UserInfoRepository;
+import com.example.userservice.model.AppUser;
+import com.example.userservice.repository.AppUserRepository;
 import com.example.userservice.service.JwtService;
 import com.example.userservice.service.UserService;
 import com.example.userservice.validation.UserValidation;
@@ -38,7 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class UserServiceImpl implements UserService {
 
-    UserInfoRepository userInfoRepository;
+    AppUserRepository appUserRepository;
     PasswordEncoder passwordEncoder;
     ModelMapper modelMapper;
     MessageSource messageSource;
@@ -48,13 +48,13 @@ public class UserServiceImpl implements UserService {
     AppSecurityUtils appSecurityUtils;
 
     @Override
-    public AuthenticationResponse login(LoginRequest request) {
+    public AuthResponse login(LoginRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     request.getUsername(), request.getPassword()));
             if (authentication.isAuthenticated()) {
                 TokenDto token = jwtService.generateToken(request.getUsername());
-                return new AuthenticationResponse(token.getAccessToken(),null, token.getExpiresAt());
+                return new AuthResponse(token.getAccessToken(),null, token.getExpiresAt());
             } else {
                 throw new BadCredentialsException(HttpStatus.UNAUTHORIZED.getReasonPhrase());
             }
@@ -73,9 +73,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public MessageResponse register(RegisterAccountRequest request) throws ValidationException {
         userValidation.validateAccountExisted(request);
-        UserInfo userInfo = modelMapper.map(request, UserInfo.class);
-        userInfo.setPassword(passwordEncoder.encode(request.getPassword()));
-        userInfoRepository.saveAndFlush(userInfo);
+        AppUser appUser = modelMapper.map(request, AppUser.class);
+        appUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        appUserRepository.saveAndFlush(appUser);
         String res = messageSource.getMessage(MessageConstant.MGS_RES_ACCOUNT, null, LocaleContextHolder.getLocale());
         String msg = messageSource.getMessage(MessageConstant.MSG_INF_RESOURCE_CREATED, new String[]{res}, LocaleContextHolder.getLocale());
         return new MessageResponse(StringUtils.capitalize(msg));

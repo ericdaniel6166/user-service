@@ -3,7 +3,7 @@ package com.example.userservice.api;
 import com.example.springbootmicroservicesframework.dto.MessageResponse;
 import com.example.springbootmicroservicesframework.exception.ValidationException;
 import com.example.springbootmicroservicesframework.utils.UriConst;
-import com.example.userservice.dto.AuthenticationResponse;
+import com.example.userservice.dto.AuthResponse;
 import com.example.userservice.dto.LoginRequest;
 import com.example.userservice.dto.RegisterAccountRequest;
 import com.example.userservice.service.UserService;
@@ -35,7 +35,7 @@ public class AuthApi {
     }
 
     @PostMapping("/log-in")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody @Valid LoginRequest request) {
+    public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request) {
         return ResponseEntity.ok(userService.login(request));
     }
 

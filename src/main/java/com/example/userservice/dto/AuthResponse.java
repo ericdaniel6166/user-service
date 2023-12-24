@@ -14,8 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthenticationResponse {
-
+public class AuthResponse {
     String accessToken;
     String refreshToken;
     LocalDateTime expiresAt;
