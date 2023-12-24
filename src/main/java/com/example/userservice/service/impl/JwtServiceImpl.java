@@ -26,10 +26,10 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JwtServiceImpl implements JwtService {
 
-    final JwtProperties jwtProperties;
+    JwtProperties jwtProperties;
 
     @Override
     public void verifyToken(String token) {

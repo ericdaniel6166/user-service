@@ -4,6 +4,7 @@ import com.example.springbootmicroservicesframework.dto.MessageResponse;
 import com.example.springbootmicroservicesframework.exception.ValidationException;
 import com.example.springbootmicroservicesframework.utils.Const;
 import com.example.springbootmicroservicesframework.utils.MessageConstant;
+import com.example.springbootmicroservicesframework.utils.AppSecurityUtils;
 import com.example.userservice.dto.AuthenticationResponse;
 import com.example.userservice.dto.LoginRequest;
 import com.example.userservice.dto.RegisterAccountRequest;
@@ -44,6 +45,7 @@ public class UserServiceImpl implements UserService {
     JwtService jwtService;
     UserValidation userValidation;
     AuthenticationManager authenticationManager;
+    AppSecurityUtils appSecurityUtils;
 
     @Override
     public AuthenticationResponse login(LoginRequest request) {
@@ -62,16 +64,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public MessageResponse verifyToken(String authorization) {
-        jwtService.verifyToken(extractToken(authorization));
+    public MessageResponse verifyToken() {
+        jwtService.verifyToken(appSecurityUtils.getAccessToken());
         return Const.MESSAGE_RESPONSE_OK;
-    }
-
-    private String extractToken(String authorizationHeader) {
-        if (authorizationHeader != null && authorizationHeader.startsWith(Const.HEADER_AUTHORIZATION_PREFIX)) {
-            return authorizationHeader.substring(Const.HEADER_AUTHORIZATION_PREFIX.length());
-        }
-        return null;
     }
 
     @Transactional

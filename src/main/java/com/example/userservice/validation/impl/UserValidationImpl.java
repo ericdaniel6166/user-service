@@ -24,11 +24,11 @@ import java.util.Set;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserValidationImpl implements UserValidation {
 
-    final UserInfoRepository userInfoRepository;
-    final MessageSource messageSource;
+    UserInfoRepository userInfoRepository;
+    MessageSource messageSource;
 
 
     @Override

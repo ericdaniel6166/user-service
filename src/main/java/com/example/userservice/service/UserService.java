@@ -12,5 +12,5 @@ public interface UserService {
 
     AuthenticationResponse login(LoginRequest request);
 
-    MessageResponse verifyToken(String authorization);
+    MessageResponse verifyToken();
 }
