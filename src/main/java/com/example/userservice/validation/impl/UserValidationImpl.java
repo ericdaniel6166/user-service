@@ -1,11 +1,11 @@
 package com.example.userservice.validation.impl;
 
+import com.example.springbootmicroservicesframework.dto.AccountDto;
 import com.example.springbootmicroservicesframework.exception.ValidationErrorDetail;
 import com.example.springbootmicroservicesframework.exception.ValidationException;
 import com.example.springbootmicroservicesframework.utils.Const;
 import com.example.springbootmicroservicesframework.utils.MessageConstant;
-import com.example.userservice.dto.AccountDto;
-import com.example.userservice.repository.UserInfoRepository;
+import com.example.userservice.repository.AppUserRepository;
 import com.example.userservice.validation.UserValidation;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -24,25 +24,24 @@ import java.util.Set;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserValidationImpl implements UserValidation {
 
-    final UserInfoRepository userInfoRepository;
-    final MessageSource messageSource;
-
+    AppUserRepository appUserRepository;
+    MessageSource messageSource;
 
     @Override
     public void validateAccountExisted(AccountDto account) throws ValidationException {
         Set<ValidationErrorDetail> errorDetails = new HashSet<>();
-        if (Boolean.TRUE.equals(userInfoRepository.existsByUsername(account.getUsername()))) {
+        if (Boolean.TRUE.equals(appUserRepository.existsByUsername(account.getUsername()))) {
             String res = messageSource.getMessage(MessageConstant.MGS_RES_USERNAME, null, LocaleContextHolder.getLocale());
             String msg = messageSource.getMessage(MessageConstant.MSG_ERR_RESOURCE_EXISTED, new String[]{res}, LocaleContextHolder.getLocale());
-            errorDetails.add(new ValidationErrorDetail(Const.FIELD_USERNAME, StringUtils.capitalize(msg)));
+            errorDetails.add(new ValidationErrorDetail(Const.FIELD_USERNAME, null, StringUtils.capitalize(msg)));
         }
-        if (Boolean.TRUE.equals(userInfoRepository.existsByEmail(account.getEmail()))) {
+        if (Boolean.TRUE.equals(appUserRepository.existsByEmail(account.getEmail()))) {
             String res = messageSource.getMessage(MessageConstant.MGS_RES_EMAIL, null, LocaleContextHolder.getLocale());
             String msg = messageSource.getMessage(MessageConstant.MSG_ERR_RESOURCE_EXISTED, new String[]{res}, LocaleContextHolder.getLocale());
-            errorDetails.add(new ValidationErrorDetail(Const.FIELD_EMAIL, StringUtils.capitalize(msg)));
+            errorDetails.add(new ValidationErrorDetail(Const.FIELD_EMAIL, null, StringUtils.capitalize(msg)));
         }
 
         if (CollectionUtils.isNotEmpty(errorDetails)) {

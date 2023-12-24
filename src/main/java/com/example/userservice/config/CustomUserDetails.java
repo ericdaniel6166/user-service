@@ -1,6 +1,6 @@
 package com.example.userservice.config;
 
-import com.example.userservice.model.UserInfo;
+import com.example.userservice.model.AppUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,9 +12,9 @@ public class CustomUserDetails implements UserDetails {
     private String username;
     private String password;
 
-    public CustomUserDetails(UserInfo userInfo) {
-        this.username = userInfo.getUsername();
-        this.password = userInfo.getPassword();
+    public CustomUserDetails(AppUser appUser) {
+        this.username = appUser.getUsername();
+        this.password = appUser.getPassword();
     }
 
     @Override

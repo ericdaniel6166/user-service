@@ -1,5 +1,9 @@
 package com.example.userservice.dto;
 
+import com.example.springbootmicroservicesframework.dto.AccountDto;
+import com.example.springbootmicroservicesframework.dto.PasswordDto;
+import com.example.springbootmicroservicesframework.validation.PasswordMatches;
+import com.example.springbootmicroservicesframework.validation.ValidPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
@@ -8,7 +12,8 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RegisterAccountRequest implements AccountDto {
+@PasswordMatches
+public class RegisterAccountRequest implements AccountDto, PasswordDto {
     @NotBlank
     String username;
 
@@ -17,5 +22,9 @@ public class RegisterAccountRequest implements AccountDto {
     String email;
 
     @NotBlank
+    @ValidPassword
     String password;
+
+    @NotBlank
+    String confirmPassword;
 }
