@@ -37,17 +37,16 @@ eureka:
 security:
   enabled: true
   skip-urls:
-    - /auth/**
     - /guest/**
     - /actuator/**
     - /swagger-ui/**
     - /v3/api-docs/**
     - /api-docs/**
     - /error/**
+    - /auth/**
 
 keycloak:
   enabled: true
-
   realm: spring-boot-microservices-realm
   auth-server-url: http://${app.keycloak-host}:${app.keycloak-port}
   resource: user-service

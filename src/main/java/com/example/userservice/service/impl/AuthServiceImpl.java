@@ -3,10 +3,10 @@ package com.example.userservice.service.impl;
 import com.example.springbootmicroservicesframework.dto.MessageResponse;
 import com.example.springbootmicroservicesframework.exception.AppValidationException;
 import com.example.springbootmicroservicesframework.service.KeycloakService;
-import com.example.springbootmicroservicesframework.utils.Const;
+import com.example.springbootmicroservicesframework.utils.SecurityConst;
 import com.example.springbootmicroservicesframework.utils.MessageConstant;
 import com.example.userservice.dto.RegisterAccountRequest;
-import com.example.userservice.service.UserService;
+import com.example.userservice.service.AuthService;
 import com.example.userservice.validation.UserValidation;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
@@ -32,7 +32,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-public class UserServiceImpl implements UserService {
+public class AuthServiceImpl implements AuthService {
 
     KeycloakService keycloakService;
     UserValidation userValidation;
@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
         credential.setValue(request.getPassword());
 
         user.setCredentials(Collections.singletonList(credential));
-        Optional<GroupRepresentation> customerOpt = keycloakService.searchGroupByName(Const.GROUP_CUSTOMER);
+        Optional<GroupRepresentation> customerOpt = keycloakService.searchGroupByName(SecurityConst.GROUP_CUSTOMER);
         if (customerOpt.isPresent()) {
             GroupRepresentation customer = customerOpt.get();
             user.setGroups(Collections.singletonList(customer.getPath()));
