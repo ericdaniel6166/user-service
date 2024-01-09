@@ -1,5 +1,7 @@
 package com.example.userservice.api;
 
+import com.example.springbootmicroservicesframework.dto.TestDto;
+import com.example.springbootmicroservicesframework.utils.AppSecurityUtils;
 import com.example.springbootmicroservicesframework.utils.UriConst;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -25,6 +27,32 @@ public class GuestApi {
     @GetMapping("/test")
     public ResponseEntity<Object> test() {
         return ResponseEntity.ok("test");
+    }
+
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/test4")
+    public ResponseEntity<Object> test4() {
+        return ResponseEntity.ok(TestDto.builder()
+                .username(AppSecurityUtils.getUsername())
+                .email(AppSecurityUtils.getEmail())
+                .emailVerified(AppSecurityUtils.getEmailVerified())
+                .scope(AppSecurityUtils.getScope())
+                .fullName(AppSecurityUtils.getFullName())
+                .firstName(AppSecurityUtils.getFirstName())
+                .lastName(AppSecurityUtils.getLastName())
+                .issuer(AppSecurityUtils.getIssuer())
+                .jwtId(AppSecurityUtils.getJwtId())
+                .remoteAddress(AppSecurityUtils.getRemoteAddress())
+                .sessionId(AppSecurityUtils.getSessionId())
+                .subject(AppSecurityUtils.getSubject())
+                .tokenValue(AppSecurityUtils.getTokenValue())
+                .audience(AppSecurityUtils.getAudience())
+                .expiresAt(AppSecurityUtils.getExpiresAt())
+                .issuedAt(AppSecurityUtils.getIssuedAt())
+                .notBefore(AppSecurityUtils.getNotBefore())
+                .authorities(AppSecurityUtils.getAuthorities())
+                .claims(AppSecurityUtils.getClaims())
+                .build());
     }
 
     @Operation(security = @SecurityRequirement(name = "bearerAuth"))

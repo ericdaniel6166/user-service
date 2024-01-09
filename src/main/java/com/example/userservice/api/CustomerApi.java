@@ -2,7 +2,7 @@ package com.example.userservice.api;
 
 import com.example.springbootmicroservicesframework.utils.AppSecurityUtils;
 import com.example.springbootmicroservicesframework.utils.UriConst;
-import com.example.userservice.dto.TestDto;
+import com.example.springbootmicroservicesframework.dto.TestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AccessLevel;
@@ -30,10 +30,22 @@ public class CustomerApi {
     public ResponseEntity<Object> test() {
         return ResponseEntity.ok(TestDto.builder()
                 .username(AppSecurityUtils.getUsername())
-                .preferredUsername(AppSecurityUtils.getPreferredUsername())
                 .email(AppSecurityUtils.getEmail())
                 .emailVerified(AppSecurityUtils.getEmailVerified())
                 .scope(AppSecurityUtils.getScope())
+                .fullName(AppSecurityUtils.getFullName())
+                .firstName(AppSecurityUtils.getFirstName())
+                .lastName(AppSecurityUtils.getLastName())
+                .issuer(AppSecurityUtils.getIssuer())
+                .jwtId(AppSecurityUtils.getJwtId())
+                .remoteAddress(AppSecurityUtils.getRemoteAddress())
+                .sessionId(AppSecurityUtils.getSessionId())
+                .subject(AppSecurityUtils.getSubject())
+                .tokenValue(AppSecurityUtils.getTokenValue())
+                .audience(AppSecurityUtils.getAudience())
+                .expiresAt(AppSecurityUtils.getExpiresAt())
+                .issuedAt(AppSecurityUtils.getIssuedAt())
+                .notBefore(AppSecurityUtils.getNotBefore())
                 .authorities(AppSecurityUtils.getAuthorities())
                 .claims(AppSecurityUtils.getClaims())
                 .build());
@@ -52,13 +64,6 @@ public class CustomerApi {
     public ResponseEntity<Object> test3() {
         return ResponseEntity.ok("test3");
     }
-
-
-
-
-
-
-
 
 
 }

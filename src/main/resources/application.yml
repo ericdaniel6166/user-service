@@ -49,7 +49,7 @@ keycloak:
   enabled: true
   realm: spring-boot-microservices-realm
   auth-server-url: http://${app.keycloak-host}:${app.keycloak-port}
-  resource: user-service
+  resource: microservices-admin-client
   credentials:
     secret: 123456789
 
