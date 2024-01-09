@@ -23,6 +23,8 @@ app:
   mqtt-port: 1883
   swagger-info-title: User Service
   swagger-info-version: v1.0
+  keycloak-host: localhost
+  keycloak-port: 8090
 
 eureka:
   client:
@@ -32,9 +34,34 @@ eureka:
   instance:
     lease-renewal-interval-in-seconds: 5
 
+security:
+  enabled: true
+  skip-urls:
+    - /guest/**
+    - /actuator/**
+    - /swagger-ui/**
+    - /v3/api-docs/**
+    - /api-docs/**
+    - /error/**
+    - /auth/**
+
+keycloak:
+  enabled: true
+  realm: spring-boot-microservices-realm
+  auth-server-url: http://${app.keycloak-host}:${app.keycloak-port}
+  resource: microservices-admin-client
+  credentials:
+    secret: 123456789
+
 spring:
   application:
     name: ${app.application-name}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://${app.keycloak-host}:${app.keycloak-port}/realms/spring-boot-microservices-realm
+
   flyway:
     baseline-on-migrate: true
     baseline-version: 0.0
@@ -77,11 +104,6 @@ spring:
       ddl-auto: none
     show-sql: true
 
-  security:
-    jwt:
-      enabled: true
-      expires-in: 90000 #ms
-      secret: 5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437
 
 management:
   tracing:
