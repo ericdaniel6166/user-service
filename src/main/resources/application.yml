@@ -25,6 +25,9 @@ app:
   swagger-info-version: v1.0
   keycloak-host: localhost
   keycloak-port: 8090
+  redis-host: localhost
+  redis-port: 6379
+  redis-time-to-live: 600000 #10 minutes #ms
 
 eureka:
   client:
@@ -53,6 +56,7 @@ keycloak:
   credentials:
     secret: 123456789
 
+
 spring:
   application:
     name: ${app.application-name}
@@ -61,7 +65,6 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://${app.keycloak-host}:${app.keycloak-port}/realms/spring-boot-microservices-realm
-
   flyway:
     baseline-on-migrate: true
     baseline-version: 0.0
@@ -104,6 +107,16 @@ spring:
       ddl-auto: none
     show-sql: true
 
+  redis:
+    enabled: true
+  cache:
+    redis:
+      time-to-live: ${app.redis-time-to-live}
+    type: redis
+  data:
+    redis:
+      host: ${app.redis-host}
+      port: ${app.redis-port}
 
 management:
   tracing:
