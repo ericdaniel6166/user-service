@@ -43,23 +43,23 @@ public class AuthServiceImpl implements AuthService {
     public MessageResponse register(RegisterAccountRequest request) throws AppValidationException {
         userValidation.validateAccountExisted(request);
 
-        UserRepresentation user = new UserRepresentation();
+        var user = new UserRepresentation();
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
 
-        CredentialRepresentation credential = new CredentialRepresentation();
+        var credential = new CredentialRepresentation();
         credential.setTemporary(false);
         credential.setType(CredentialRepresentation.PASSWORD);
         credential.setValue(request.getPassword());
 
         user.setCredentials(Collections.singletonList(credential));
-        Optional<GroupRepresentation> customerOpt = keycloakService.searchGroupByName(SecurityConst.GROUP_CUSTOMER);
+        var customerOpt = keycloakService.searchGroupByName(SecurityConst.GROUP_CUSTOMER);
         if (customerOpt.isPresent()) {
             GroupRepresentation customer = customerOpt.get();
             user.setGroups(Collections.singletonList(customer.getPath()));
         }
         user.setEnabled(true); //improvement later
-        Response response = keycloakService.createUser(user);
+        var response = keycloakService.createUser(user);
 
         try {
             CreatedResponseUtil.getCreatedId(response);
@@ -67,8 +67,8 @@ public class AuthServiceImpl implements AuthService {
             log.info(e.getResponse().toString());
             throw new ResponseStatusException(e.getResponse().getStatus(), e.getMessage(), e);
         }
-        String res = messageSource.getMessage(MessageConstant.MGS_RES_ACCOUNT, null, LocaleContextHolder.getLocale());
-        String msg = messageSource.getMessage(MessageConstant.MSG_INF_RESOURCE_CREATED, new String[]{res}, LocaleContextHolder.getLocale());
+        var res = messageSource.getMessage(MessageConstant.MGS_RES_ACCOUNT, null, LocaleContextHolder.getLocale());
+        var msg = messageSource.getMessage(MessageConstant.MSG_INF_RESOURCE_CREATED, new String[]{res}, LocaleContextHolder.getLocale());
 
         return new MessageResponse(StringUtils.capitalize(msg));
     }
